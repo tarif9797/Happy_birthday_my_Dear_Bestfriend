@@ -101,10 +101,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         countdownElement.innerHTML = 
-            `🎂 হাসি এখন<br>` +
+            `🎂 Happy Birthday<br>` +
             `<span class="text-2xl md:text-3xl font-bold text-honey">${years} বছর ${months} মাস ${days} দিন</span><br>` +
             `<span class="text-lg font-semibold text-honey">${hours} ঘণ্টা ${minutes} মিনিট ${seconds} সেকেন্ড</span><br>` +
-            `<span class="text-sm opacity-80 mt-2 block">সেকেন্ড প্রতি চলছে 💛</span>`;
+            `<span class="text-sm opacity-80 mt-2 block"> 💛</span>`;
     }
 
     // Update every 1 second for live running age
