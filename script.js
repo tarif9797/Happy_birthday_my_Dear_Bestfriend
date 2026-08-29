@@ -304,7 +304,7 @@ document.addEventListener('DOMContentLoaded', function() {
         ];
 
         // Flower emojis to mix with petals
-        const flowerEmojis = ['🌼', '🌸', '🌺'];
+        const flowerEmojis = ['🌼', '💝', '🥰', '🌸', '🌺'];
 
         // --- Rose Petal Class ---
         function Petal() {
