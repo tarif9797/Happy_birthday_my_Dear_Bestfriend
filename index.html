@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="bn" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <title>শুভ জন্মদিন, হাসি! 💛🎂</title>
+
+  <!-- This script pulls in Tailwind CSS for styling -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- These are for the animations and photo gallery -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/css/lightgallery.min.css" />
+
+  <!-- Google Fonts for the Anime look -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- Link to your new external CSS file -->
+  <link rel="stylesheet" href="style.css">
+  <meta property="og:image" content="https://placehold.co/1200x630/FFD700/2c3e50?text=শুভ+জন্মদিন,+হাসি!">
+</head>
+<body>
+
+<!-- Background Music (auto-play) -->
+<audio id="bg-music" loop autoplay playsinline preload="auto">
+  <source src="img/sound.mp3" type="audio/mpeg">
+</audio>
+
+<!-- Fullscreen Overlay -->
+<div id="fs-overlay" class="fixed inset-0 z-[9999] bg-black/80 backdrop-blur-sm flex items-center justify-center cursor-pointer" onclick="enterFullscreen()">
+  <div class="text-center text-white">
+    <div class="text-6xl mb-4 animate-bounce">📱</div>
+    <p class="text-xl font-semibold">Tap to Enter Fullscreen</p>
+    <p class="text-sm opacity-70 mt-2">একবার tap করো, তারপর auto fullscreen</p>
+  </div>
+</div>
+
+<!-- Canvas for the falling petals -->
+<canvas id="sakura-canvas"></canvas>
+
+<!-- Section 1: Hero Welcome -->
+<header class="h-screen relative flex items-center justify-center text-white overflow-hidden">
+  <video autoplay loop muted playsinline class="absolute top-0 left-0 w-full h-full object-cover z-[-1]">
+    <source src="img/sa.mp4" type="video/mp4">
+  </video>
+
+  <div class="absolute inset-0 bg-black bg-opacity-40"></div>
+
+  <div class="text-center z-10 p-4" data-aos="fade-in" data-aos-duration="1500">
+    <div class="hero-frame inline-block px-8 py-6 md:px-12 md:py-8">
+      <h1 class="text-4xl md:text-6xl font-bold drop-shadow-lg">Happy Birthday my Dear Bestie!</h1>
+      <div class="hero-divider w-24 h-1 bg-white mx-auto my-4"></div>
+      <p class="mt-2 text-2xl md:text-3xl font-anime">শুভ জন্মদিন, হাসি! 💛🎂</p>
+      <p class="mt-4 text-lg md:text-xl font-semibold opacity-90">আমাদের ২+ বছরের দুষ্টুমি, ঝগড়া, রাগ-অভিমান আর অসংখ্য স্মৃতির আরেকটি বছর।</p>
+    </div>
+    <div id="countdown" class="mt-8 text-2xl font-semibold tracking-widest leading-relaxed"></div>
+  </div>
+</header>
+
+<!-- Main Content -->
+<main class="container mx-auto p-6 md:p-12">
+
+  <!-- Section 2: A Letter For You -->
+  <section class="my-16 md:my-24 max-w-3xl mx-auto text-center" data-aos="fade-up">
+    <h2 class="text-4xl md:text-5xl font-anime text-honey mb-8 drop-shadow-sm">My Dear Best Friend 💝😊🌺</h2>
+    <div class="text-left text-lg leading-relaxed space-y-4 bg-white p-8 rounded-lg shadow-lg border-l-4 border-honey">
+      <p>কখন যে আমাদের সেই সাধারণ classmate থেকে বন্ধুত্বটা এতটা গভীর হয়ে গেল, সত্যি বলতে আমরা কেউই হয়তো সেটা খেয়াল করিনি।</p>
+      <p>শুরুটা ছিল খুব সাধারণ—একসাথে পড়াশোনা, মাদ্রাসায় যাওয়া, private-এ যাওয়ার সময় একে অপরের জন্য অপেক্ষা করা। অথচ আজ পিছনে ফিরে তাকালে মনে হয়, এই ছোট ছোট মুহূর্তগুলোর মধ্যেই আমাদের বন্ধুত্বের সবচেয়ে সুন্দর গল্পগুলো লুকিয়ে আছে। 🥹💝</p>
+      <p>সময়ের সাথে অনেক মানুষই জীবনে আসে, আবার হারিয়েও যায়। কিন্তু কিছু মানুষ অজান্তেই আমাদের জীবনের এমন একটা অংশ হয়ে যায়, যাদের ছাড়া আগের মতো সবকিছু কল্পনা করাও কঠিন।<br>তুই আমার কাছে ঠিক তেমনই একজন। 🫂❤️</p>
+      <p>তুই একটু রাগী, একটু emotional, আর সামান্য কিছু নিয়েও অনেক tension করস। 😑😂<br>কিন্তু তুই কি জানিস? তোর এই রাগ, অভিমান, emotion—সবকিছুর মধ্যেই আমি একটা আলাদা মায়া খুঁজে পাই। 🥹😌</p>
+      <p>তুই রাগ করে কথা বলা বন্ধ করে দিস, গুম হয়ে থাকিস, আর আমাকে বসে বসে তোর রাগ ভাঙানোর চেষ্টা করতে হয়। 😂<br>আর সবচেয়ে মজার ব্যাপার—ভুল যে-ই করুক, শেষ পর্যন্ত Sorry আমাকেই বলতে হয়! 😐😒</p>
+      <p>তুই আমাকে Shoytan, Kutta, গরু, ছাগল আরও কত কী বলস—গুনে শেষ করা যাবে না। 😑😂<br>কিন্তু আমি তোকে Petni না ডাকলে যেন আমার শান্তিই লাগে না। 👻😏</p>
+      <p class="text-honey font-semibold">কিন্তু এইসব হাসি-ঠাট্টার আড়ালে একটা সত্যি কথা কি জানিস?—</p>
+      <p class="text-honey text-xl font-bold">তুই আমার কাছে সত্যিই অনেক বেশি special। 💝</p>
+      <p>তুই আমার কথা মন দিয়ে শুনিস, আমার ছোট ছোট বিষয়ও খেয়াল করিস, আমাকে সবচেয়ে বেশি priority দিস, দরকারের সময় পাশে থাকিস।<br>হয়তো সবসময় মুখে বলা হয় না, কিন্তু তোর এই care, মায়া আর উপস্থিতিটা আমি সত্যিই অনেক বেশি appreciate করি। আমি তোকে কখনো হারাতে চাই না, I love you so much, bestie. I'm really proud of you. ❤️🥰</p>
+      <p>জীবনে সব সম্পর্ক একই রকম থাকে না, সময়ের সাথে অনেক কিছু বদলে যায়।<br>কিন্তু কিছু বন্ধুত্ব থাকে, যেগুলো সময়ের সাথে পুরোনো হয় না—বরং আরও গভীর হয়।<br>আমি চাই, আমাদের বন্ধুত্বটাও ঠিক তেমনই থাকুক।<br>হয়তো ভবিষ্যতে আমাদের কথা হবেনা, দেখা হবেনা, কিন্তু সত্যিই তুই সব সময় আমার হৃদয়ের এক অংশে পড়ে থাকবি 🥰, কারণ তোকে ভুলা কখনোই সম্ভব নয়। 🫂💝</p>
+      <p>তাই আজ তোকে বড় কোনো কথা না বলে শুধু একটা দোয়া করি—</p>
+      <p class="bg-yellow-50 p-4 rounded-lg border border-yellow-200">আল্লাহ যেন তোর জীবনটা সুন্দর করে দেন, তোর মনের সব ভালো চাওয়া পূরণ করেন, তোকে সবসময় হাসিখুশি রাখেন, আর তোর জীবনের প্রতিটা পথ সহজ ও বরকতময় করে দেন। 🤲💗</p>
+      <p>আমি চাই তুই সবসময় এমনই থাকিস।<br>নিজের এই সুন্দর হাসিটা কখনো হারিয়ে ফেলিস না। 😊🌸</p>
+      <p>আর হ্যাঁ...<br>বয়স তো বাড়ছেই, কিন্তু তর Petni হওয়া বন্ধ করার কোনো লক্ষণ এখনো দেখতে পাচ্ছি না! 🤧🙆🏿‍♂️😁🤣</p>
+      <p class="text-honey text-xl font-bold">শুভ জন্মদিন, My Dear Best Friend. 💝🎂🌺</p>
+      <p>আর একটা কথা মনে রাখিস—</p>
+      <p>ঝগড়া হবে, রাগ হবে, অভিমান হবে, কখনো হয়তো কথা বলাও বন্ধ হবে…<br>কিন্তু এসবের কোনোটাই আমাদের বন্ধুত্বের শেষ হতে পারবে না। 🫂❤️🥰</p>
+      <p>কারণ কিছু মানুষকে জীবনে পাওয়া শুধু ভাগ্যের ব্যাপার নয়—<br>তাদের ধরে রাখতে পারাটাও একটা সুন্দর নিয়ামত। 🥰💝</p>
+      <p>তুই আমার জীবনের সেই সুন্দর মানুষগুলোর একজন, যাকে আমি সত্যিই হারাতে চাই না। 🌸</p>
+      <p class="text-right mt-8 font-semibold text-honey text-xl">
+        ~ইতি<br>— তোর সেই বিরক্তিকর শয়তান-এর পক্ষ থেকে 👿💝
+      </p>
+    </div>
+  </section>
+
+  <!-- Section 3: The Cinematic Story -->
+  <section class="my-16 md:my-32">
+    <h2 class="text-4xl md:text-5xl font-anime text-center mb-16" data-aos="fade-up">আমাদের গল্পের অধ্যায়গুলো 📖💛</h2>
+    
+    <div class="story-timeline relative max-w-3xl mx-auto">
+      <!-- Vertical golden line -->
+      <div class="absolute left-6 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-honey via-yellow-400 to-honey transform md:-translate-x-1/2"></div>
+      
+      <!-- Chapter 1 -->
+      <div class="story-chapter relative mb-20" data-aos="fade-up" data-aos-duration="1000">
+        <div class="flex items-center mb-6">
+          <div class="chapter-number w-12 h-12 rounded-full bg-honey text-white font-bold text-xl flex items-center justify-center z-10 shadow-lg">১</div>
+          <div class="chapter-line flex-1 h-0.5 bg-gradient-to-r from-honey to-transparent ml-4"></div>
+        </div>
+        <div class="chapter-content bg-white/80 backdrop-blur-sm rounded-2xl p-8 md:p-10 shadow-lg border border-yellow-200 md:ml-16 hover:shadow-xl transition-shadow duration-500">
+          <h3 class="text-2xl md:text-3xl font-anime text-honey mb-4">শুরুটা ছিল সাধারণ</h3>
+          <div class="chapter-divider w-16 h-1 bg-gradient-to-r from-honey to-yellow-300 rounded-full mb-6"></div>
+          <p class="text-lg md:text-xl leading-relaxed text-gray-700">একই ক্লাসে পড়তাম আমরা। তখন কে জানত, এই সাধারণ পরিচয়টাই একদিন এতটা special একটা বন্ধুত্বে পরিণত হবে। 💛</p>
+        </div>
+      </div>
+      
+      <!-- Chapter 2 -->
+      <div class="story-chapter relative mb-20" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="100">
+        <div class="flex items-center mb-6">
+          <div class="chapter-number w-12 h-12 rounded-full bg-honey text-white font-bold text-xl flex items-center justify-center z-10 shadow-lg">২</div>
+          <div class="chapter-line flex-1 h-0.5 bg-gradient-to-r from-honey to-transparent ml-4"></div>
+        </div>
+        <div class="chapter-content bg-white/80 backdrop-blur-sm rounded-2xl p-8 md:p-10 shadow-lg border border-yellow-200 md:ml-16 hover:shadow-xl transition-shadow duration-500">
+          <h3 class="text-2xl md:text-3xl font-anime text-honey mb-4">একসাথে যাওয়া</h3>
+          <div class="chapter-divider w-16 h-1 bg-gradient-to-r from-honey to-yellow-300 rounded-full mb-6"></div>
+          <p class="text-lg md:text-xl leading-relaxed text-gray-700">মাদ্রাসায় যাওয়া, private-এ যাওয়া, আর যাওয়ার সময় একে অপরের জন্য অপেক্ষা করা—এই ছোট ছোট অভ্যাসগুলোর মাঝেই তুই আর আমি কখন যে এতটা close হয়ে গেলাম, বুঝতেই পারিনি। 🫂</p>
+        </div>
+      </div>
+      
+      <!-- Chapter 3 -->
+      <div class="story-chapter relative mb-20" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
+        <div class="flex items-center mb-6">
+          <div class="chapter-number w-12 h-12 rounded-full bg-honey text-white font-bold text-xl flex items-center justify-center z-10 shadow-lg">৩</div>
+          <div class="chapter-line flex-1 h-0.5 bg-gradient-to-r from-honey to-transparent ml-4"></div>
+        </div>
+        <div class="chapter-content bg-white/80 backdrop-blur-sm rounded-2xl p-8 md:p-10 shadow-lg border border-yellow-200 md:ml-16 hover:shadow-xl transition-shadow duration-500">
+          <h3 class="text-2xl md:text-3xl font-anime text-honey mb-4">Classmate থেকে Best Friend</h3>
+          <div class="chapter-divider w-16 h-1 bg-gradient-to-r from-honey to-yellow-300 rounded-full mb-6"></div>
+          <p class="text-lg md:text-xl leading-relaxed text-gray-700">প্রতিদিনের দুষ্টুমি, গল্প, একসাথে ঘোরাঘুরি আর অসংখ্য ছোট ছোট মুহূর্ত… দেখতে দেখতে তুই আর শুধু আমার classmate রইলি না, আমার best friend হয়ে গেলি। 💛</p>
+        </div>
+      </div>
+      
+      <!-- Chapter 4 -->
+      <div class="story-chapter relative" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="300">
+        <div class="flex items-center mb-6">
+          <div class="chapter-number w-12 h-12 rounded-full bg-honey text-white font-bold text-xl flex items-center justify-center z-10 shadow-lg">৪</div>
+          <div class="chapter-line flex-1 h-0.5 bg-gradient-to-r from-honey to-transparent ml-4"></div>
+        </div>
+        <div class="chapter-content bg-white/80 backdrop-blur-sm rounded-2xl p-8 md:p-10 shadow-lg border border-yellow-200 md:ml-16 hover:shadow-xl transition-shadow duration-500">
+          <h3 class="text-2xl md:text-3xl font-anime text-honey mb-4">টম & জেরি যুগ 😂</h3>
+          <div class="chapter-divider w-16 h-1 bg-gradient-to-r from-honey to-yellow-300 rounded-full mb-6"></div>
+          <p class="text-lg md:text-xl leading-relaxed text-gray-700">তারপর শুরু হলো আমাদের আসল কাহিনি—তুই রাগ করবি, অভিমান করবি, আমাকে 'Shoytan Beda' বলবি, আমি তোকে 'Petni' ডাকব… আবার কিছুক্ষণ পর ঠিকও হয়ে যাব। 😐😂</p>
+          <p class="text-lg md:text-xl leading-relaxed text-gray-700 mt-4 pt-4 border-t border-yellow-200">ঝগড়া আমাদের হবেই, কিন্তু একটা জিনিস কখনো হবে না—আমাদের বিচ্ছেদ। 🫂💝</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 4: আমাদের কিছু কথা 💬💛 -->
+  <section class="my-16 md:my-24">
+    <h2 class="text-4xl md:text-5xl font-anime text-center mb-16 text-honey" data-aos="fade-up">আমাদের কিছু কথা 💬💛</h2>
+    
+    <div class="memory-timeline relative max-w-4xl mx-auto">
+      <!-- Center vertical line -->
+      <div class="timeline-line absolute left-6 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-pink-300 via-honey to-pink-300 transform md:-translate-x-1/2"></div>
+      
+      <!-- Memory 1 - Left -->
+      <div class="memory-item left" data-direction="left">
+        <div class="memory-wrapper">
+          <div class="memory-image-frame">
+            <img src="img/1.jpg" alt="Screenshot 1" class="memory-image">
+          </div>
+          <div class="memory-text">
+            <h3 class="memory-title">"পেত্নী নামে save করা সেই মানুষটা 👻💛🥰"</h3>
+            <p class="memory-caption">নামটা একটু অদ্ভুত, কিন্তু মানুষটা আমার কাছে বেশ special। 😂</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Memory 2 - Right -->
+      <div class="memory-item right" data-direction="right">
+        <div class="memory-wrapper">
+          <div class="memory-image-frame">
+            <img src="img/2.jpg" alt="Screenshot 2" class="memory-image">
+          </div>
+          <div class="memory-text">
+            <h3 class="memory-title">"কখনো ভুলে যাবি না—এই promise" 🫂</h3>
+            <p class="memory-caption">কিছু কথা মজা করে বলা হলেও, কিছু promise মনে থেকে যায়।</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Memory 3 - Left -->
+      <div class="memory-item left" data-direction="left">
+        <div class="memory-wrapper">
+          <div class="memory-image-frame">
+            <img src="img/3.jpg" alt="Screenshot 3" class="memory-image">
+          </div>
+          <div class="memory-text">
+            <h3 class="memory-title">"আমাকেও promise করতে হবে এইটা কোন কথা😒😐!" 💛</h3>
+            <p class="memory-caption">আমি যেন সবসময় এমনই থাকি—সেই promise-টাও চেয়ে বসেছিলি।</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Memory 4 - Right -->
+      <div class="memory-item right" data-direction="right">
+        <div class="memory-wrapper">
+          <div class="memory-image-frame">
+            <img src="img/4.jpg" alt="Screenshot 4" class="memory-image">
+          </div>
+          <div class="memory-text">
+            <h3 class="memory-title">"কারণ? মন চাইছে তাই! 😑☹️"</h3>
+            <p class="memory-caption">কোনো কারণ ছাড়াই আমাকে বকা দেওয়া, 'কুত্তা' বলা—আর আমি কারণ জিজ্ঞেস করলে উত্তর: 'মন চাইছে তাই দিছি।' 😐😂</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Memory 5 - Left -->
+      <div class="memory-item left" data-direction="left">
+        <div class="memory-wrapper">
+          <div class="memory-image-frame">
+            <img src="img/5.jpg" alt="Screenshot 5" class="memory-image">
+          </div>
+          <div class="memory-text">
+            <h3 class="memory-title">"Cute বলাটাও অপরাধ! 🤧💝"</h3>
+            <p class="memory-caption">আমি শুধু বলেছিলাম—'কুত্তার মতো cute 💝😊🌺'... আর তাতেই পেত্নী রাজ্যের মহারানীর রাগ! 😂</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Memory 6 - Right -->
+      <div class="memory-item right" data-direction="right">
+        <div class="memory-wrapper">
+          <div class="memory-image-frame">
+            <img src="img/6.jpg" alt="Screenshot 6" class="memory-image">
+          </div>
+          <div class="memory-text">
+            <h3 class="memory-title">"আবার রাগ! 😑"</h3>
+            <p class="memory-caption">আমাদের friendship-এ রাগ-অভিমান যেন আলাদা একটা chapter।</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Memory 7 - Left -->
+      <div class="memory-item left" data-direction="left">
+        <div class="memory-wrapper">
+          <div class="memory-image-frame">
+            <img src="img/7.jpg" alt="Screenshot 7" class="memory-image">
+          </div>
+          <div class="memory-text">
+            <h3 class="memory-title">"রাগ ভাঙানোর mission 📞😂"</h3>
+            <p class="memory-caption">একটার পর একটা call... আর তোর একটার পর একটা reject। 😐😂</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Memory 8 - Right -->
+      <div class="memory-item right" data-direction="right">
+        <div class="memory-wrapper">
+          <div class="memory-image-frame">
+            <img src="img/8.jpg" alt="Screenshot 8" class="memory-image">
+          </div>
+          <div class="memory-text">
+            <h3 class="memory-title">"Sorry… 😭"</h3>
+            <p class="memory-caption">রাগ ভাঙানোর জন্য প্রথম দফা sorry।</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Memory 9 - Left -->
+      <div class="memory-item left" data-direction="left">
+        <div class="memory-wrapper">
+          <div class="memory-image-frame">
+            <img src="img/9.jpg" alt="Screenshot 9" class="memory-image">
+          </div>
+          <div class="memory-text">
+            <h3 class="memory-title">"আচ্ছা, আর রাগ করিস না... Sorry! 🥲"</h3>
+            <p class="memory-caption">কাজ হচ্ছে না দেখে আবার sorry। 😂</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Memory 10 - Right -->
+      <div class="memory-item right" data-direction="right">
+        <div class="memory-wrapper">
+          <div class="memory-image-frame">
+            <img src="img/10.jpg" alt="Screenshot 10" class="memory-image">
+          </div>
+          <div class="memory-text">
+            <h3 class="memory-title">"শেষ পর্যন্ত আবার আমিই! 😐💛"</h3>
+            <p class="memory-caption">ভুল কার, সেটা আজও রহস্য। কিন্তু sorry যে আমাকেই বলতে হবে—এটা নিশ্চিত। 😂</p>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+    
+    <!-- Closing message -->
+    <div class="text-center mt-16 max-w-2xl mx-auto" data-aos="fade-up">
+      <p class="text-xl text-gray-600 leading-relaxed">কথাগুলো হয়তো ছোট ছোট...<br>কিন্তু এই ছোট কথাগুলোর মাঝেই লুকিয়ে আছে আমাদের অনেকটা গল্প। 💛</p>
+      <p class="text-lg text-gray-500 mt-4">রাগ, অভিমান, sorry, call reject—সব মিলিয়েই তো আমরা! 😂🫂</p>
+    </div>
+  </section>
+
+
+  <!-- Section 6: তোর কিছু বিখ্যাত কথা 💬 -->
+  <section class="my-16 md:my-24 max-w-4xl mx-auto">
+    <h2 class="text-4xl md:text-5xl font-anime text-center mb-16 text-honey" data-aos="fade-up">তোর কিছু বিখ্যাত কথা 😂💛</h2>
+    
+    <!-- Quote 1: Signature / Iconic -->
+    <div class="quote-card quote-signature mb-12" data-aos="fade-up" data-aos-delay="100">
+      <div class="quote-emoji">💬</div>
+      <div class="quote-main">
+        <p class="text-2xl md:text-3xl leading-relaxed text-gray-800 font-semibold">"বেশি বেশি করতাছোস,<br>অতিরিক্ত কোনো কিছুই ভালো না।" 🙂</p>
+      </div>
+      <div class="quote-signature">— তুই 🐱</div>
+    </div>
+    
+    <!-- Quote 2: Funny Logic -->
+    <div class="quote-card quote-funny mb-12" data-aos="fade-up" data-aos-delay="200">
+      <div class="quote-emoji">😂</div>
+      <div class="quote-main">
+        <p class="text-xl md:text-2xl leading-relaxed text-gray-700">"তুই relationship করলে girlfriend পেয়ে আমাকে ভুলে যাবি।<br>তাই তুই চাস না আমি কারো সাথে relationship করি।" 🙂</p>
+      </div>
+      <div class="quote-context">
+        <p>এটাই তোর যুক্তি। 😂</p>
+      </div>
+      <div class="quote-signature">— তুই 🐱</div>
+    </div>
+    
+    <!-- Quote 3: Rage + Contradiction -->
+    <div class="quote-card quote-rage mb-12" data-aos="fade-up" data-aos-delay="300">
+      <div class="quote-emoji">🙄</div>
+      <div class="quote-main">
+        <p class="text-xl md:text-2xl leading-relaxed text-gray-700">"তোর সাথে আর জীবনেও কথা বলব না,<br>আর কোনোদিন মেসেজ দিবি না।"</p>
+      </div>
+      <div class="quote-context quote-contradiction">
+        <p>তারপর সারাদিন আমি মেসেজ না দিলেই আবার এসে—<br><span class="text-honey font-bold">"মরছস নাকি?"</span> 🙄😂</p>
+      </div>
+      <div class="quote-signature">— তুই 🐱</div>
+    </div>
+    
+    <!-- Quote 4: Teasing -->
+    <div class="quote-card quote-tease mb-12" data-aos="fade-up" data-aos-delay="400">
+      <div class="quote-emoji">😆</div>
+      <div class="quote-main">
+        <p class="text-xl md:text-2xl leading-relaxed text-gray-700">"এত মায়া তুই তোর বউকে দেখাস,<br>আমাকে দেখতে হবে না।"</p>
+      </div>
+      <div class="quote-gap"></div>
+      <div class="quote-main quote-punchline">
+        <p class="text-xl md:text-2xl leading-relaxed text-gray-700">"ওফফ, সরি! ভুলে গেছিলাম—<br>তোর তো আবার বউ নাই! 😆😆"</p>
+      </div>
+      <div class="quote-context">
+        <p>বলে আমাকে খেপানোই তোর আসল উদ্দেশ্য ছিল। ☹️😂</p>
+      </div>
+      <div class="quote-signature">— তুই 🐱</div>
+    </div>
+    
+    <!-- Closing line -->
+    <div class="text-center mt-16" data-aos="fade-up">
+      <p class="text-lg text-gray-500 italic">তোর মুখের এইসব কথাগুলাই একদিন আমাদের সবচেয়ে মজার স্মৃতি হয়ে থাকবে। 💛😂</p>
+    </div>
+  </section>
+
+  <!-- Section 7: Petni Art Section -->
+  <section class="my-16 md:my-24" data-aos="fade-up">
+    <div class="petni-hang-section text-center">
+      <!-- Hanging string decoration -->
+      <div class="petni-hang-container">
+        <div class="petni-string-left">
+          <div class="petni-string-line"></div>
+          <div class="petni-photo-frame">
+            <img src="img/Petni1.png" alt="Petni 1" class="petni-photo">
+          </div>
+        </div>
+        <div class="petni-title-area">
+          <h2 class="text-4xl md:text-5xl font-anime text-honey">শুভ জন্মদিন, আমার প্রিয় Petni! 👻💛</h2>
+        </div>
+        <div class="petni-string-right">
+          <div class="petni-string-line"></div>
+          <div class="petni-photo-frame">
+            <img src="img/Petni2.jpg" alt="Petni 2" class="petni-photo">
+          </div>
+        </div>
+      </div>
+      <p class="petni-caption mt-8">আমার বেস্টফ্রেন্ড কে আঁকতে গিয়ে যখন দেখি সত্যিকারের পেত্নী আর্ট করে ফেলছি 😒😁</p>
+    </div>
+  </section>
+
+  <!-- Section 8: Finale -->
+  <section class="my-16 md:my-24" data-aos="fade-up">
+    <div class="max-w-4xl mx-auto rounded-lg shadow-2xl overflow-hidden bg-warm">
+      <div class="p-8 text-center">
+        <p class="text-xl text-gray-700 mb-4">আজকের দিনটা তোর মতোই সুন্দর হোক।</p>
+        <p class="text-xl text-gray-700 mb-4">অনেক হাস, ভালো থাক, আর হ্যাঁ—আমাকে একটু কম জ্বালিস। 😂</p>
+        <div class="mt-8 pt-6 border-t border-yellow-300">
+          <p class="text-lg text-gray-600 mb-2">আমাদের friendship-এর গল্প এখানেই শেষ নয়...</p>
+          <p class="text-lg text-gray-600">আরও অনেক ঝগড়া, অনেক দুষ্টুমি আর অনেক স্মৃতি বাকি। 🫂💛</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- Footer -->
+<footer class="bg-warm text-white p-8 text-center">
+  <p>আজকের দিনটা পুরোপুরি উপভোগ করো। 💛</p>
+  <p class="text-sm opacity-70 mt-2">আশা করি তোর এই wish ভালো লেগেছে...</p>
+  <p class="text-sm opacity-50 mt-4">তোর সেই Shoytan থেকে 💛🐱</p>
+</footer>
+
+<!-- These scripts are for the animations and photo gallery -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/lightgallery.min.js"></script>
+
+<!-- Link to your new external JavaScript file -->
+<script src="script.js"></script>
+</body>
+</html>

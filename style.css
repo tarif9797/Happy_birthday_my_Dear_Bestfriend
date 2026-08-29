@@ -1,0 +1,611 @@
+/* Fullscreen Overlay */
+#fs-overlay {
+    transition: opacity 0.3s ease;
+}
+
+#fs-overlay:active {
+    opacity: 0.5;
+}
+
+/* Custom styles for Birthday Theme - Pink & Yellow Accent */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #F0F8FF; /* Alice Blue - original light sky blue */
+    color: #2c3e50; /* Dark Navy/Slate */
+}
+.font-anime {
+    font-family: 'Mochiy Pop One', sans-serif;
+}
+/* Main accent - Pink (original sakura theme) */
+.text-sakura {
+    color: #FFB7C5; /* Cherry Blossom Pink */
+}
+/* Build/Accent font - Black Bold */
+.text-honey {
+    color: #1a1a1a; /* Dark Black */
+    font-weight: 700; /* Bold */
+}
+.bg-honey {
+    background-color: #FFD700; /* Bright Yellow */
+}
+.bg-warm {
+    background: linear-gradient(135deg, #FFF0F5, #FFE4E1); /* Lavender blush to Misty rose */
+}
+.bg-navy {
+    background-color: #2c3e50;
+}
+
+/* Style for the falling petals canvas */
+#sakura-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 5;
+    pointer-events: none; /* Allows clicks to go through the canvas */
+}
+
+/* For hiding the scrollbar */
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+.scrollbar-hide {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+/* Pink petal animation color */
+.petal-color {
+    fill: #FFB7C5;
+}
+
+/* Custom border accent - Pink */
+.border-honey {
+    border-color: #FFB7C5;
+}
+
+/* Hover effect for cards */
+.bg-white:hover {
+    transform: translateY(-2px);
+    transition: transform 0.3s ease;
+}
+
+/* Cinematic Story Timeline */
+.story-chapter {
+    opacity: 1;
+    transition: all 0.6s ease;
+}
+
+.story-chapter .chapter-content {
+    transform: translateY(0);
+    transition: transform 0.5s ease, box-shadow 0.5s ease;
+}
+
+.story-chapter:hover .chapter-content {
+    transform: translateY(-4px);
+}
+
+.chapter-number {
+    background: linear-gradient(135deg, #FFB7C5, #FF69B4);
+    box-shadow: 0 4px 15px rgba(255, 183, 197, 0.4);
+}
+
+.chapter-divider {
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+/* Smooth scroll reveal for chapters - Pink borders */
+.story-timeline .story-chapter:nth-child(odd) .chapter-content {
+    border-left: 4px solid #FFB7C5;
+}
+
+.story-timeline .story-chapter:nth-child(even) .chapter-content {
+    border-right: 4px solid #FFB7C5;
+}
+
+/* Hero Frame Style */
+.hero-frame {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
+                inset 0 0 20px rgba(255, 255, 255, 0.1);
+    position: relative;
+}
+
+.hero-frame::before {
+    content: '';
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
+    border: 2px solid rgba(255, 215, 0, 0.5);
+    border-radius: 22px;
+    pointer-events: none;
+}
+
+.hero-divider {
+    animation: glow 2s ease-in-out infinite;
+}
+
+@keyframes glow {
+    0%, 100% { opacity: 1; box-shadow: 0 0 10px rgba(255, 255, 255, 0.5); }
+    50% { opacity: 0.8; box-shadow: 0 0 20px rgba(255, 255, 255, 0.8); }
+}
+
+/* Footer Style */
+footer.bg-warm {
+    background: linear-gradient(135deg, #FFF0F5, #FFE4E1);
+}
+
+footer p {
+    color: #1a1a1a; /* Black text */
+}
+
+/* Memory Timeline Section */
+.memory-timeline {
+    padding: 20px 0;
+}
+
+.memory-item {
+    position: relative;
+    margin-bottom: 60px;
+    opacity: 0;
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.memory-item.left {
+    transform: translateX(-60px);
+}
+
+.memory-item.right {
+    transform: translateX(60px);
+}
+
+.memory-item.revealed {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.memory-item.left .memory-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-right: 60px;
+    padding-left: 0;
+}
+
+.memory-item.right .memory-wrapper {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    padding-left: 60px;
+    padding-right: 0;
+}
+
+/* Timeline dot */
+.memory-item::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 30px;
+    width: 16px;
+    height: 16px;
+    background: #FFD700;
+    border: 3px solid #FFB7C5;
+    border-radius: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+}
+
+.memory-image-frame {
+    flex: 0 0 60%;
+    max-width: 60%;
+    position: relative;
+}
+
+.memory-image {
+    width: 100%;
+    height: auto;
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    border: 4px solid white;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.memory-image:hover {
+    transform: scale(1.02);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+}
+
+.memory-text {
+    flex: 0 0 40%;
+    max-width: 40%;
+    padding: 20px;
+}
+
+.memory-title {
+    font-family: 'Mochiy Pop One', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+.memory-caption {
+    font-size: 0.95rem;
+    color: #555;
+    line-height: 1.6;
+}
+
+/* Mobile: stack vertically */
+@media (max-width: 768px) {
+    .memory-item.left .memory-wrapper,
+    .memory-item.right .memory-wrapper {
+        flex-direction: column;
+        padding-left: 40px;
+        padding-right: 0;
+    }
+
+    .memory-item::after {
+        left: 18px;
+    }
+
+    .memory-image-frame,
+    .memory-text {
+        flex: none;
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .memory-text {
+        padding: 12px 0;
+    }
+
+    .memory-title {
+        font-size: 1.1rem;
+    }
+
+    .memory-caption {
+        font-size: 0.9rem;
+    }
+
+    .memory-item {
+        margin-bottom: 40px;
+    }
+}
+
+/* Quote Cards Section */
+.quote-card {
+    position: relative;
+    background: white;
+    border-radius: 20px;
+    padding: 32px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border: 2px solid #FFF8DC;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.quote-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.quote-emoji {
+    font-size: 2.5rem;
+    margin-bottom: 16px;
+}
+
+.quote-main {
+    margin-bottom: 16px;
+}
+
+.quote-signature {
+    text-align: right;
+    font-weight: 700;
+    color: #1a1a1a;
+    font-size: 1.1rem;
+    margin-top: 16px;
+}
+
+.quote-context {
+    background: linear-gradient(135deg, #FFF8DC, #FFFACD);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-top: 12px;
+    border-left: 4px solid #FFD700;
+}
+
+.quote-context p {
+    color: #555;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.quote-gap {
+    height: 16px;
+}
+
+/* Quote 1: Signature - prominent */
+.quote-signature-card {
+    border: 3px solid #FFD700;
+    background: linear-gradient(135deg, #FFFDF0, #FFF8DC);
+}
+
+.quote-signature .quote-main p {
+    font-size: 1.8rem;
+}
+
+/* Quote 2: Funny Logic */
+.quote-funny {
+    border-left: 5px solid #FFB7C5;
+}
+
+/* Quote 3: Rage + Contradiction */
+.quote-rage {
+    border-left: 5px solid #FF69B4;
+}
+
+.quote-contradiction {
+    background: linear-gradient(135deg, #FFF0F5, #FFE4E1);
+    border-left-color: #FF69B4;
+}
+
+/* Quote 4: Teasing */
+.quote-tease {
+    border-left: 5px solid #FFD700;
+}
+
+.quote-punchline {
+    padding: 16px 20px;
+    background: linear-gradient(135deg, #FFF8DC, #FFFACD);
+    border-radius: 12px;
+}
+
+/* Petni Hanging Photo Section */
+.petni-hang-section {
+    padding: 40px 20px;
+}
+
+.petni-hang-container {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.petni-string-left,
+.petni-string-right {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: petniSway 3s ease-in-out infinite;
+}
+
+.petni-string-left {
+    animation-delay: 0s;
+}
+
+.petni-string-right {
+    animation-delay: 1.5s;
+}
+
+@keyframes petniSway {
+    0%, 100% { transform: rotate(-2deg); }
+    50% { transform: rotate(2deg); }
+}
+
+.petni-string-line {
+    width: 2px;
+    height: 60px;
+    background: linear-gradient(to bottom, transparent, #FFD700, #FFB7C5);
+    margin-bottom: 0;
+}
+
+.petni-photo-frame {
+    position: relative;
+    background: white;
+    border: 4px solid #FFD700;
+    border-radius: 16px;
+    padding: 8px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease;
+}
+
+.petni-photo-frame:hover {
+    transform: scale(1.05) rotate(0deg);
+}
+
+.petni-photo {
+    width: 200px;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+.petni-title-area {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    padding-top: 80px;
+}
+
+.petni-caption {
+    color: #555;
+    font-size: 1rem;
+    font-style: italic;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@media (max-width: 768px) {
+    .petni-hang-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    .petni-title-area {
+        padding-top: 20px;
+        order: -1;
+    }
+    .petni-photo {
+        width: 160px;
+        height: 200px;
+    }
+    .petni-string-line {
+        height: 40px;
+    }
+}
+
+/* Universal Responsive Design */
+@media (max-width: 1024px) {
+    .hero-frame {
+        padding: 24px 40px;
+    }
+    .hero-frame h1 {
+        font-size: 2.5rem;
+    }
+    .quote-main p {
+        font-size: 1.3rem;
+    }
+    .petni-photo {
+        width: 180px;
+        height: 220px;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Hero */
+    .hero-frame {
+        padding: 16px 20px;
+        border-radius: 14px;
+    }
+    .hero-frame h1 {
+        font-size: 1.6rem;
+        line-height: 1.3;
+    }
+    .hero-frame p {
+        font-size: 1rem;
+    }
+    /* Story timeline */
+    .story-timeline .story-chapter:nth-child(odd) .chapter-content,
+    .story-timeline .story-chapter:nth-child(even) .chapter-content {
+        border-left: 4px solid #FFB7C5;
+        border-right: none;
+    }
+    .chapter-number {
+        width: 36px;
+        height: 36px;
+        font-size: 14px;
+    }
+    .chapter-content {
+        padding: 20px;
+    }
+    .chapter-content h3 {
+        font-size: 1.2rem;
+    }
+    /* Memory timeline */
+    .memory-item.left .memory-wrapper,
+    .memory-item.right .memory-wrapper {
+        flex-direction: column;
+        padding-left: 36px;
+        padding-right: 0;
+    }
+    .memory-item::after {
+        left: 14px;
+        width: 12px;
+        height: 12px;
+    }
+    .memory-image-frame, .memory-text {
+        flex: none;
+        max-width: 100%;
+        width: 100%;
+    }
+    .memory-text {
+        padding: 10px 0;
+    }
+    .memory-title {
+        font-size: 1rem;
+    }
+    .memory-caption {
+        font-size: 0.85rem;
+    }
+    /* Quote cards */
+    .quote-card {
+        padding: 20px;
+        border-radius: 14px;
+    }
+    .quote-emoji {
+        font-size: 2rem;
+    }
+    .quote-main p {
+        font-size: 1.1rem;
+    }
+    .quote-signature {
+        font-size: 1rem;
+    }
+    .quote-punchline p {
+        font-size: 1.1rem;
+    }
+    /* Petni section */
+    .petni-hang-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    .petni-title-area {
+        padding-top: 10px;
+        order: -1;
+    }
+    .petni-title-area h2 {
+        font-size: 1.5rem;
+    }
+    .petni-photo {
+        width: 140px;
+        height: 180px;
+    }
+    .petni-string-line {
+        height: 30px;
+    }
+    /* General sections */
+    section {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+    main.container {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-frame h1 {
+        font-size: 1.3rem;
+    }
+    .hero-frame p {
+        font-size: 0.85rem;
+    }
+    .quote-card {
+        padding: 16px;
+    }
+    .quote-main p {
+        font-size: 1rem;
+    }
+    .petni-photo {
+        width: 120px;
+        height: 150px;
+    }
+    .timeline-line {
+        left: 12px !important;
+    }
+}
