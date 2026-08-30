@@ -85,26 +85,30 @@ document.addEventListener('DOMContentLoaded', function() {
         let diff = now - birthMoment;
         if (diff < 0) diff = 0;
 
-        // Calculate years
+        // Calculate years, months, days (24-hour clock, no AM/PM)
         let years = now.getFullYear() - 2008;
-        let months = now.getMonth() - 8;
+        let months = now.getMonth() - 8; // Sep=8 (0-indexed)
         let days = now.getDate() - 1;
-        let hours = now.getHours();
-        let minutes = now.getMinutes();
-        let seconds = now.getSeconds();
 
-        if (seconds < 0) { minutes--; seconds += 60; }
-        if (minutes < 0) { hours--; minutes += 60; }
-        if (hours < 0) { days--; hours += 24; }
+        // If days negative, borrow from months
         if (days < 0) {
             months--;
-            const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0);
-            days += prevMonth.getDate();
+            const prevMonthDays = new Date(now.getFullYear(), now.getMonth(), 0).getDate();
+            days += prevMonthDays;
         }
+
+        // If months negative, borrow from years and recalc days
         if (months < 0) {
             years--;
             months += 12;
+            // Recalculate: show how many days into current age-month
+            days = now.getDate();
         }
+
+        // 24-hour format (0-23), never AM/PM
+        const hours = now.getHours();
+        const minutes = now.getMinutes();
+        const seconds = now.getSeconds();
 
         countdownElement.innerHTML = 
             `Age💝🌺<br>` +
