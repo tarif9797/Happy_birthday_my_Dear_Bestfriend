@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
 
-    // --- Auto Fullscreen Mode ---
+    // --- Auto Fullscreen Mode (auto-tap after 3 sec) ---
     (function() {
         let isFullscreen = false;
         let userTapped = false;
@@ -22,7 +22,6 @@ document.addEventListener('DOMContentLoaded', function() {
         function onFullscreenChange() {
             isFullscreen = !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement);
             if (!isFullscreen && userTapped) {
-                // Re-enter fullscreen on next interaction
                 setTimeout(tryFullscreen, 200);
             }
         }
@@ -36,6 +35,13 @@ document.addEventListener('DOMContentLoaded', function() {
             userTapped = true;
             tryFullscreen();
         };
+
+        // Auto-tap after 3 seconds — hide overlay and enter fullscreen
+        setTimeout(function() {
+            userTapped = true;
+            tryFullscreen();
+            if (overlay) overlay.style.display = 'none';
+        }, 3000);
 
         // Auto re-enter on any interaction after first tap
         ['click', 'touchstart', 'touchend', 'scroll', 'wheel', 'keydown', 'mousedown', 'pointerdown'].forEach(evt => {
