@@ -186,77 +186,80 @@ document.addEventListener('DOMContentLoaded', function() {
         memoryItems.forEach(item => memoryObserver.observe(item));
     }
 
-    // --- Ultra-Smooth Continuous Auto-Scroll (pixel-by-pixel) ---
+    // --- Ultra-Smooth Continuous Auto-Scroll ---
     (function() {
-        const SCROLL_SPEED = 40; // pixels per second — adjust this single variable
-        const RESUME_DELAY = 5000; // 5 seconds after user stops interacting
-        let isScrolling = false;
+        const SCROLL_SPEED = 40; // pixels per second
+        const RESUME_DELAY = 5000; // 5 seconds
         let isPaused = false;
+        let isScrolling = false;
         let resumeTimer = null;
-        let lastTimestamp = null;
+        let scrollAccum = 0; // accumulate fractional pixels
+        let lastTime = null;
         let rafId = null;
 
-        function canScroll() {
-            return (window.innerHeight + window.scrollY) < (document.body.scrollHeight - 2);
+        function atBottom() {
+            return (window.scrollY + window.innerHeight) >= (document.documentElement.scrollHeight - 5);
         }
 
-        function smoothScrollStep(timestamp) {
-            if (!isScrolling) return;
+        function tick(timestamp) {
             if (isPaused) {
-                lastTimestamp = null;
-                rafId = null;
-                return;
-            }
-            if (!canScroll()) {
                 isScrolling = false;
-                rafId = null;
+                lastTime = null;
+                scrollAccum = 0;
                 return;
             }
-            if (lastTimestamp === null) {
-                lastTimestamp = timestamp;
+            if (atBottom()) {
+                isScrolling = false;
+                lastTime = null;
+                scrollAccum = 0;
+                return;
             }
-            const delta = (timestamp - lastTimestamp) / 1000;
-            lastTimestamp = timestamp;
-            const pixelsToScroll = SCROLL_SPEED * delta;
-            window.scrollBy(0, pixelsToScroll);
-            rafId = requestAnimationFrame(smoothScrollStep);
+            if (lastTime === null) lastTime = timestamp;
+
+            // Use fixed 16ms step for consistent smoothness (60fps)
+            const FIXED_DT = 16.67; // ms per frame
+            const dt = FIXED_DT / 1000; // convert to seconds
+            lastTime = timestamp;
+
+            // Accumulate fractional pixels
+            scrollAccum += SCROLL_SPEED * dt;
+
+            // Only scroll when we have at least 1 pixel
+            if (scrollAccum >= 1) {
+                const pixels = Math.floor(scrollAccum);
+                scrollAccum -= pixels;
+                window.scrollBy({ top: pixels, left: 0, behavior: 'auto' });
+            }
+
+            rafId = requestAnimationFrame(tick);
         }
 
-        function startAutoScroll() {
+        function start() {
             if (isScrolling || isPaused) return;
             isScrolling = true;
-            lastTimestamp = null;
-            rafId = requestAnimationFrame(smoothScrollStep);
+            lastTime = null;
+            scrollAccum = 0;
+            rafId = requestAnimationFrame(tick);
         }
 
-        function pauseAutoScroll() {
+        function pause() {
             isPaused = true;
-            isScrolling = false; // Stop current RAF loop
+            isScrolling = false;
+            if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
             if (resumeTimer) clearTimeout(resumeTimer);
             resumeTimer = setTimeout(() => {
                 isPaused = false;
                 isScrolling = false;
-                startAutoScroll();
+                start();
             }, RESUME_DELAY);
         }
 
-        // Detect user interaction: touch, wheel, mouse, keyboard
-        let userInteracting = false;
-        let userTimer = null;
-        function onUserAction() {
-            userInteracting = true;
-            clearTimeout(userTimer);
-            userTimer = setTimeout(() => { userInteracting = false; }, 300);
-        }
-        ['touchstart', 'touchmove'].forEach(evt => {
-            window.addEventListener(evt, () => { onUserAction(); pauseAutoScroll(); }, { passive: true });
-        });
-        ['wheel', 'mousedown', 'keydown'].forEach(evt => {
-            window.addEventListener(evt, () => { pauseAutoScroll(); }, { passive: true });
-        });
+        // Pause on any user interaction
+        ['touchstart', 'touchmove'].forEach(e => window.addEventListener(e, pause, { passive: true }));
+        ['wheel', 'mousedown', 'keydown'].forEach(e => window.addEventListener(e, pause, { passive: true }));
 
-        // Start on page load
-        startAutoScroll();
+        // Start smoothly after 1 second delay
+        setTimeout(start, 1000);
     })();
 
     // --- Background Music Always On ---
