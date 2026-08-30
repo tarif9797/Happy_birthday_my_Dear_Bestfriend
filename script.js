@@ -266,31 +266,79 @@ document.addEventListener('DOMContentLoaded', function() {
         setTimeout(start, 1000);
     })();
 
-    // --- Background Music (created in JS, fully invisible) ---
+    // --- Background Music (fully invisible, reliable autoplay) ---
     (function() {
-        var bgMusic = document.createElement('audio');
-        bgMusic.id = 'bg-music';
-        bgMusic.loop = true;
-        bgMusic.preload = 'auto';
-        bgMusic.src = 'img/sound.mp3';
-        bgMusic.volume = 0.5;
-        // Hide completely — no visible player anywhere
-        bgMusic.style.cssText = 'display:none!important;position:fixed!important;top:-9999px!important;left:-9999px!important;width:0!important;height:0!important;opacity:0!important;visibility:hidden!important;pointer-events:none!important;z-index:-9999!important;';
-        document.documentElement.appendChild(bgMusic);
+        // Create audio element programmatically — never visible
+        var audio = document.createElement('audio');
+        audio.id = 'bg-music';
+        audio.loop = true;
+        audio.preload = 'auto';
+        audio.src = 'img/sound.mp3';
+        audio.volume = 0.5;
+        audio.muted = false;
+        audio.controls = false; // explicitly no controls
+        audio.setAttribute('playsinline', '');
+        // Hide completely with multiple fallbacks
+        audio.style.cssText = 'position:fixed!important;top:-99999px!important;left:-99999px!important;width:0!important;height:0!important;opacity:0!important;visibility:hidden!important;pointer-events:none!important;z-index:-99999!important;overflow:hidden!important;';
+        // Remove from accessibility tree
+        audio.tabIndex = -1;
+        audio.setAttribute('aria-hidden', 'true');
+        document.body.appendChild(audio);
 
-        var musicPlaying = false;
-        function tryPlayMusic() {
-            if (!musicPlaying) {
-                bgMusic.play().then(function() {
-                    musicPlaying = true;
-                }).catch(function() {});
+        var hasStartedPlaying = false;
+
+        function attemptPlay() {
+            if (hasStartedPlaying) return; // never restart
+            var playPromise = audio.play();
+            if (playPromise !== undefined) {
+                playPromise.then(function() {
+                    hasStartedPlaying = true;
+                    audio.muted = false;
+                }).catch(function() {
+                    // Autoplay blocked — try muted first (Android Chrome strategy)
+                    if (!hasStartedPlaying) {
+                        audio.muted = true;
+                        audio.play().then(function() {
+                            // Playing muted, now try to unmute
+                            setTimeout(function() {
+                                audio.muted = false;
+                            }, 100);
+                        }).catch(function() {
+                            // Still blocked, will retry on user interaction
+                        });
+                    }
+                });
             }
         }
 
-        tryPlayMusic();
+        // Strategy 1: Try immediately on page load
+        attemptPlay();
 
-        ['click', 'touchstart', 'touchend', 'scroll', 'mousemove', 'keydown', 'mousedown'].forEach(function(evt) {
-            document.addEventListener(evt, tryPlayMusic, { passive: true });
+        // Strategy 2: Try when fullscreen overlay is tapped
+        if (typeof window.enterFullscreen === 'function') {
+            var origFS = window.enterFullscreen;
+            window.enterFullscreen = function() {
+                origFS();
+                attemptPlay();
+            };
+        }
+
+        // Strategy 3: Retry silently on first natural user interaction
+        var interactionEvents = ['click', 'touchstart', 'touchend', 'scroll', 'wheel', 'mousedown', 'pointerdown', 'keydown'];
+        function onFirstInteraction() {
+            attemptPlay();
+            // Remove after first successful interaction attempt
+            interactionEvents.forEach(function(evt) {
+                document.removeEventListener(evt, onFirstInteraction, { passive: true });
+            });
+        }
+        interactionEvents.forEach(function(evt) {
+            document.addEventListener(evt, onFirstInteraction, { passive: true });
+        });
+
+        // Strategy 4: On visibility change (user returns to tab)
+        document.addEventListener('visibilitychange', function() {
+            if (!document.hidden) attemptPlay();
         });
     })();
 
