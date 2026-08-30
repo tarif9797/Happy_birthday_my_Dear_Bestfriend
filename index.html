@@ -25,10 +25,7 @@
 </head>
 <body>
 
-<!-- Background Music (auto-play, hidden) -->
-<audio id="bg-music" loop autoplay playsinline preload="auto" style="display:none!important;position:absolute;visibility:hidden;width:0;height:0;overflow:hidden;opacity:0;pointer-events:none;z-index:-1;">
-  <source src="img/sound.mp3" type="audio/mpeg">
-</audio>
+<!-- Background Music (created in JS, fully hidden) -->
 
 <!-- Fullscreen Overlay -->
 <div id="fs-overlay" class="fixed inset-0 z-[9999] bg-black/80 backdrop-blur-sm flex items-center justify-center cursor-pointer" onclick="enterFullscreen()">

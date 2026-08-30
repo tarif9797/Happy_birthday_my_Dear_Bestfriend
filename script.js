@@ -262,28 +262,33 @@ document.addEventListener('DOMContentLoaded', function() {
         setTimeout(start, 1000);
     })();
 
-    // --- Background Music Always On ---
-    const bgMusic = document.getElementById('bg-music');
-    if (bgMusic) {
+    // --- Background Music (created in JS, fully invisible) ---
+    (function() {
+        var bgMusic = document.createElement('audio');
+        bgMusic.id = 'bg-music';
+        bgMusic.loop = true;
+        bgMusic.preload = 'auto';
+        bgMusic.src = 'img/sound.mp3';
         bgMusic.volume = 0.5;
-        let musicPlaying = false;
+        // Hide completely — no visible player anywhere
+        bgMusic.style.cssText = 'display:none!important;position:fixed!important;top:-9999px!important;left:-9999px!important;width:0!important;height:0!important;opacity:0!important;visibility:hidden!important;pointer-events:none!important;z-index:-9999!important;';
+        document.documentElement.appendChild(bgMusic);
 
+        var musicPlaying = false;
         function tryPlayMusic() {
             if (!musicPlaying) {
-                bgMusic.play().then(() => {
+                bgMusic.play().then(function() {
                     musicPlaying = true;
-                }).catch(() => {});
+                }).catch(function() {});
             }
         }
 
-        // Try playing immediately
         tryPlayMusic();
 
-        // Also try on every user interaction until it plays
-        ['click', 'touchstart', 'touchend', 'scroll', 'mousemove', 'keydown', 'mousedown'].forEach(evt => {
+        ['click', 'touchstart', 'touchend', 'scroll', 'mousemove', 'keydown', 'mousedown'].forEach(function(evt) {
             document.addEventListener(evt, tryPlayMusic, { passive: true });
         });
-    }
+    })();
 
     // --- Rose Petals + Flower Emojis Animation ---
     const canvas = document.getElementById('sakura-canvas');
