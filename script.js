@@ -34,6 +34,14 @@ document.addEventListener('DOMContentLoaded', function() {
         window.enterFullscreen = function() {
             userTapped = true;
             tryFullscreen();
+            // Start background music on this user gesture
+            var bgm = document.getElementById('bg-music');
+            if (bgm && bgm.paused) {
+                bgm.play().then(function() {
+                    bgm.volume = 0.35;
+                    bgm.loop = true;
+                }).catch(function() {});
+            }
         };
 
         // Auto-tap after 3 seconds — hide overlay and enter fullscreen
@@ -266,79 +274,58 @@ document.addEventListener('DOMContentLoaded', function() {
         setTimeout(start, 1000);
     })();
 
-    // --- Background Music (fully invisible, reliable autoplay) ---
+    // --- Background Music (completely invisible, no UI ever) ---
     (function() {
-        // Create audio element programmatically — never visible
         var audio = document.createElement('audio');
         audio.id = 'bg-music';
         audio.loop = true;
         audio.preload = 'auto';
         audio.src = 'img/sound.mp3';
-        audio.volume = 0.5;
+        audio.volume = 0.35;
         audio.muted = false;
-        audio.controls = false; // explicitly no controls
+        audio.controls = false;
         audio.setAttribute('playsinline', '');
-        // Hide completely with multiple fallbacks
-        audio.style.cssText = 'position:fixed!important;top:-99999px!important;left:-99999px!important;width:0!important;height:0!important;opacity:0!important;visibility:hidden!important;pointer-events:none!important;z-index:-99999!important;overflow:hidden!important;';
-        // Remove from accessibility tree
+        audio.setAttribute('autoplay', '');
+        // Fully invisible — off-screen, zero size, hidden
+        audio.style.cssText = 'position:fixed!important;top:-99999px!important;left:-99999px!important;width:0!important;height:0!important;opacity:0!important;visibility:hidden!important;pointer-events:none!important;z-index:-99999!important;';
         audio.tabIndex = -1;
         audio.setAttribute('aria-hidden', 'true');
         document.body.appendChild(audio);
 
-        var hasStartedPlaying = false;
+        var musicStarted = false;
 
-        function attemptPlay() {
-            if (hasStartedPlaying) return; // never restart
-            var playPromise = audio.play();
-            if (playPromise !== undefined) {
-                playPromise.then(function() {
-                    hasStartedPlaying = true;
-                    audio.muted = false;
+        function tryPlay() {
+            if (musicStarted) return;
+            var p = audio.play();
+            if (p !== undefined) {
+                p.then(function() {
+                    musicStarted = true;
                 }).catch(function() {
-                    // Autoplay blocked — try muted first (Android Chrome strategy)
-                    if (!hasStartedPlaying) {
-                        audio.muted = true;
-                        audio.play().then(function() {
-                            // Playing muted, now try to unmute
-                            setTimeout(function() {
-                                audio.muted = false;
-                            }, 100);
-                        }).catch(function() {
-                            // Still blocked, will retry on user interaction
-                        });
-                    }
+                    // Autoplay blocked — will start on first user gesture
                 });
             }
         }
 
-        // Strategy 1: Try immediately on page load
-        attemptPlay();
+        // Attempt autoplay on page load
+        tryPlay();
 
-        // Strategy 2: Try when fullscreen overlay is tapped
-        if (typeof window.enterFullscreen === 'function') {
-            var origFS = window.enterFullscreen;
-            window.enterFullscreen = function() {
-                origFS();
-                attemptPlay();
-            };
+        // On first user interaction, start music (this is the reliable fallback)
+        var gestureEvents = ['click', 'touchstart', 'touchend', 'scroll', 'wheel', 'mousedown', 'pointerdown', 'keydown'];
+        function onGesture() {
+            tryPlay();
+            if (musicStarted) {
+                gestureEvents.forEach(function(evt) {
+                    window.removeEventListener(evt, onGesture);
+                });
+            }
         }
-
-        // Strategy 3: Retry silently on first natural user interaction
-        var interactionEvents = ['click', 'touchstart', 'touchend', 'scroll', 'wheel', 'mousedown', 'pointerdown', 'keydown'];
-        function onFirstInteraction() {
-            attemptPlay();
-            // Remove after first successful interaction attempt
-            interactionEvents.forEach(function(evt) {
-                document.removeEventListener(evt, onFirstInteraction, { passive: true });
-            });
-        }
-        interactionEvents.forEach(function(evt) {
-            document.addEventListener(evt, onFirstInteraction, { passive: true });
+        gestureEvents.forEach(function(evt) {
+            window.addEventListener(evt, onGesture, { passive: true });
         });
 
-        // Strategy 4: On visibility change (user returns to tab)
+        // Also try when tab becomes visible again
         document.addEventListener('visibilitychange', function() {
-            if (!document.hidden) attemptPlay();
+            if (!document.hidden) tryPlay();
         });
     })();
 
