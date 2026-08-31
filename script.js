@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.addEventListener('webkitfullscreenchange', onFullscreenChange);
         document.addEventListener('mozfullscreenchange', onFullscreenChange);
 
-        // Global function for overlay click
+        // Global function for overlay click — starts music + fullscreen
         window.enterFullscreen = function() {
             userTapped = true;
             tryFullscreen();
@@ -43,13 +43,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 }).catch(function() {});
             }
         };
-
-        // Auto-tap after 3 seconds — hide overlay and enter fullscreen
-        setTimeout(function() {
-            userTapped = true;
-            tryFullscreen();
-            if (overlay) overlay.style.display = 'none';
-        }, 3000);
 
         // Auto re-enter on any interaction after first tap
         ['click', 'touchstart', 'touchend', 'scroll', 'wheel', 'keydown', 'mousedown', 'pointerdown'].forEach(evt => {
@@ -274,59 +267,36 @@ document.addEventListener('DOMContentLoaded', function() {
         setTimeout(start, 1000);
     })();
 
-    // --- Background Music (completely invisible, no UI ever) ---
+    // --- Background Music (single implementation, fully invisible) ---
     (function() {
+        // Create one invisible audio element
         var audio = document.createElement('audio');
         audio.id = 'bg-music';
         audio.loop = true;
         audio.preload = 'auto';
         audio.src = 'img/sound.mp3';
-        audio.volume = 0.35;
-        audio.muted = false;
         audio.controls = false;
         audio.setAttribute('playsinline', '');
-        audio.setAttribute('autoplay', '');
-        // Fully invisible — off-screen, zero size, hidden
-        audio.style.cssText = 'position:fixed!important;top:-99999px!important;left:-99999px!important;width:0!important;height:0!important;opacity:0!important;visibility:hidden!important;pointer-events:none!important;z-index:-99999!important;';
+        audio.style.cssText = 'position:fixed;top:-99999px;left:-99999px;width:0;height:0;opacity:0;visibility:hidden;pointer-events:none;z-index:-99999;';
         audio.tabIndex = -1;
         audio.setAttribute('aria-hidden', 'true');
         document.body.appendChild(audio);
 
+        // Single flag: only one call path starts the music
         var musicStarted = false;
 
-        function tryPlay() {
+        function startMusic() {
             if (musicStarted) return;
-            var p = audio.play();
-            if (p !== undefined) {
-                p.then(function() {
-                    musicStarted = true;
-                }).catch(function() {
-                    // Autoplay blocked — will start on first user gesture
-                });
-            }
+            audio.volume = 0.35;
+            audio.play().then(function() {
+                musicStarted = true;
+            }).catch(function() {
+                // Autoplay blocked — will start when user taps overlay
+            });
         }
 
-        // Attempt autoplay on page load
-        tryPlay();
-
-        // On first user interaction, start music (this is the reliable fallback)
-        var gestureEvents = ['click', 'touchstart', 'touchend', 'scroll', 'wheel', 'mousedown', 'pointerdown', 'keydown'];
-        function onGesture() {
-            tryPlay();
-            if (musicStarted) {
-                gestureEvents.forEach(function(evt) {
-                    window.removeEventListener(evt, onGesture);
-                });
-            }
-        }
-        gestureEvents.forEach(function(evt) {
-            window.addEventListener(evt, onGesture, { passive: true });
-        });
-
-        // Also try when tab becomes visible again
-        document.addEventListener('visibilitychange', function() {
-            if (!document.hidden) tryPlay();
-        });
+        // Try autoplay on page load (works in Chrome, may fail in IMO WebView)
+        startMusic();
     })();
 
     // --- Rose Petals + Flower Emojis Animation ---
