@@ -76,46 +76,38 @@ document.addEventListener('DOMContentLoaded', function() {
     function updateCountdown() {
         const now = new Date();
 
-        // If it's birthday today!
-        if (now.getDate() === 1 && now.getMonth() === 8) {
-            countdownElement.innerHTML = `🎂 আজকে হাসির জন্মদিন! 🎉💛<br>শুভ জন্মদিন, Petni! 👻`;
-            return;
-        }
-
-        // Calculate total difference in milliseconds
-        let diff = now - birthMoment;
-        if (diff < 0) diff = 0;
-
-        // Calculate years, months, days (24-hour clock, no AM/PM)
+        // Calculate years, months, days
         let years = now.getFullYear() - 2008;
         let months = now.getMonth() - 8; // Sep=8 (0-indexed)
         let days = now.getDate() - 1;
 
-        // If days negative, borrow from months
         if (days < 0) {
             months--;
             const prevMonthDays = new Date(now.getFullYear(), now.getMonth(), 0).getDate();
             days += prevMonthDays;
         }
 
-        // If months negative, borrow from years and recalc days
         if (months < 0) {
             years--;
             months += 12;
-            // Recalculate: show how many days into current age-month
             days = now.getDate();
         }
 
-        // 24-hour format (0-23), never AM/PM
         const hours = now.getHours();
         const minutes = now.getMinutes();
         const seconds = now.getSeconds();
 
-        countdownElement.innerHTML = 
-            `Age💝🌺<br>` +
-            `<span class="text-2xl md:text-3xl font-bold text-honey">${years} বছর ${months} মাস ${days} দিন</span><br>` +
-            `<span class="text-lg font-semibold text-honey">${hours} ঘণ্টা ${minutes} মিনিট ${seconds} সেকেন্ড</span><br>` +
-            `<span class="text-sm opacity-80 mt-2 block"> 💛</span>`;
+        // Birthday message if today is Sept 1
+        const isBirthday = (now.getDate() === 1 && now.getMonth() === 8);
+        const birthdayMsg = isBirthday
+            ? `🎂 আজকে হাসির জন্মদিন! 🎉💛<br>শুভ জন্মদিন, Petni! 👻<br><br>`
+            : '';
+
+        countdownElement.innerHTML =
+            `${birthdayMsg}` +
+            `<span class="text-2xl md:text-3xl font-bold text-honey">${years} years : ${months} months : ${days} days</span><br>` +
+            `<span class="text-lg font-semibold text-honey">${hours} hours : ${minutes} min : ${seconds} sec</span><br>` +
+            `<span class="text-sm opacity-80 mt-2 block">💛</span>`;
     }
 
     // Update every 1 second for live running age
