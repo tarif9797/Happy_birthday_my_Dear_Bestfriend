@@ -636,3 +636,124 @@ footer p {
         left: 12px !important;
     }
 }
+
+/* ==================== QUESTION POPUP SYSTEM ==================== */
+
+#question-popup-overlay {
+    transition: opacity 0.3s ease;
+}
+
+#question-popup-overlay.visible {
+    display: flex !important;
+    opacity: 1;
+}
+
+#question-popup-overlay.hiding {
+    opacity: 0;
+}
+
+.popup-card {
+    animation: popupIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    border-radius: 24px;
+    background: linear-gradient(135deg, #ffffff 0%, #fff9f0 100%);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15), 0 0 30px rgba(255,182,193,0.2);
+}
+
+@keyframes popupIn {
+    from {
+        opacity: 0;
+        transform: scale(0.7) translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+@keyframes popupOut {
+    from {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: scale(0.85) translateY(20px);
+    }
+}
+
+#question-popup-overlay.hiding #question-popup-card {
+    animation: popupOut 0.3s ease forwards;
+}
+
+.popup-btn {
+    padding: 14px 32px;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 140px;
+    text-align: center;
+    font-family: inherit;
+}
+
+.popup-btn-primary {
+    background: linear-gradient(135deg, #FFD700, #FFC107);
+    color: #5a4a00;
+    border-color: #FFD700;
+    box-shadow: 0 4px 15px rgba(255,215,0,0.4);
+}
+
+.popup-btn-primary:hover, .popup-btn-primary:active {
+    background: linear-gradient(135deg, #FFC107, #FFB300);
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(255,215,0,0.6);
+}
+
+.popup-btn-secondary {
+    background: linear-gradient(135deg, #FFB7C5, #FF69B4);
+    color: white;
+    border-color: #FF69B4;
+    box-shadow: 0 4px 15px rgba(255,105,180,0.3);
+}
+
+.popup-btn-secondary:hover, .popup-btn-secondary:active {
+    background: linear-gradient(135deg, #FF69B4, #FF1493);
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(255,105,180,0.5);
+}
+
+.popup-btn-same {
+    background: linear-gradient(135deg, #FFB7C5, #FF69B4);
+    color: white;
+    border-color: #FF69B4;
+    box-shadow: 0 4px 15px rgba(255,105,180,0.3);
+}
+
+.popup-btn-same:hover, .popup-btn-same:active {
+    background: linear-gradient(135deg, #FF69B4, #FF1493);
+    transform: scale(1.05);
+}
+
+#popup-response {
+    animation: fadeInUp 0.4s ease forwards;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Trigger elements — invisible */
+[data-question-popup] {
+    height: 1px;
+    visibility: hidden;
+    pointer-events: none;
+}

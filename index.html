@@ -94,11 +94,13 @@
         </div>
         <div class="chapter-content bg-white/80 backdrop-blur-sm rounded-2xl p-8 md:p-10 shadow-lg border border-yellow-200 md:ml-16 hover:shadow-xl transition-shadow duration-500">
           <h3 class="text-2xl md:text-3xl font-anime text-honey mb-4">শুরুটা ছিল সাধারণ</h3>
-          <div class="chapter-divider w-16 h-1 bg-gradient-to-r from-honey to-yellow-300 rounded-full mb-6"></div>
-          <p class="text-lg md:text-xl leading-relaxed text-gray-700">একই ক্লাসে পড়তাম আমরা। তখন কে জানত, এই সাধারণ পরিচয়টাই একদিন এতটা special একটা বন্ধুত্বে পরিণত হবে। 💛</p>
+          <div class="chapter-divider w-16 h-1 bg-gradient-to-r from-honey to-yellow-300 rounded-full mb-6"></div>          <p class="text-lg md:text-xl leading-relaxed text-gray-700">একই ক্লাসে পড়তাম আমরা। তখন কে জানত, এই সাধারণ পরিচয়টাই একদিন এতটা special একটা বন্ধুত্বে পরিণত হবে। 💛</p>
         </div>
       </div>
-      
+
+      <!-- Popup 1 Trigger -->
+      <div data-question-popup="1"></div>
+
       <!-- Chapter 2 -->
       <div class="story-chapter relative mb-20" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="100">
         <div class="flex items-center mb-6">
@@ -138,6 +140,9 @@
           <p class="text-lg md:text-xl leading-relaxed text-gray-700 mt-4 pt-4 border-t border-yellow-200">ঝগড়া আমাদের হবেই, কিন্তু একটা জিনিস কখনো হবে না—আমাদের বিচ্ছেদ। 🫂💝</p>
         </div>
       </div>
+
+      <!-- Popup 2 Trigger -->
+      <div data-question-popup="2"></div>
     </div>
   </section>
 
@@ -286,6 +291,9 @@
       <p class="text-lg text-gray-500 mt-4">রাগ, অভিমান, sorry, call reject—সব মিলিয়েই তো আমরা! 😂🫂</p>
     </div>
   </section>
+
+  <!-- Popup 3 Trigger -->
+  <div data-question-popup="3"></div>
 
   <!-- Section 5: যে কথাগুলো মেসেজ-এ ধরা পড়ে না (screenshot chapter er por) -->
   <section class="my-16 md:my-24 max-w-3xl mx-auto" data-aos="fade-up">
@@ -623,6 +631,9 @@
     </div>
   </section>
 
+  <!-- Popup 4 Trigger -->
+  <div data-question-popup="4"></div>
+
   <!-- Section 13: Finale — শুভ জন্মদিন Letter -->
   <section class="my-16 md:my-24 max-w-3xl mx-auto" data-aos="fade-up">
     <h2 class="text-4xl md:text-5xl font-anime text-center mb-16 text-honey">শুভ জন্মদিন, Petni! 💛🎂</h2>
@@ -916,6 +927,16 @@
   </section>
 
 </main>
+
+<!-- Question Popups -->
+<div id="question-popup-overlay" class="fixed inset-0 z-[9990] bg-black/50 backdrop-blur-sm hidden items-center justify-center p-4">
+  <div id="question-popup-card" class="popup-card bg-white rounded-3xl shadow-2xl p-8 md:p-10 max-w-md w-full text-center relative border-2 border-pink-200">
+    <div id="popup-emoji-top" class="text-4xl mb-4">💬</div>
+    <p id="popup-question" class="text-xl md:text-2xl font-semibold text-gray-800 leading-relaxed mb-8"></p>
+    <div id="popup-buttons" class="flex flex-col sm:flex-row gap-4 justify-center"></div>
+    <div id="popup-response" class="mt-6 text-lg font-semibold text-honey hidden"></div>
+  </div>
+</div>
 
 <!-- Footer -->
 <footer class="bg-warm text-white p-8 text-base">

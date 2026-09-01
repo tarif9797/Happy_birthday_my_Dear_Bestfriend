@@ -457,4 +457,171 @@ document.addEventListener('DOMContentLoaded', function() {
         createFlowers();
         animate();
     }
+
+    // --- Interactive Question Popup System ---
+    (function() {
+        const overlay = document.getElementById('question-popup-overlay');
+        const card = document.getElementById('question-popup-card');
+        const questionEl = document.getElementById('popup-question');
+        const buttonsEl = document.getElementById('popup-buttons');
+        const responseEl = document.getElementById('popup-response');
+        const emojiEl = document.getElementById('popup-emoji-top');
+
+        if (!overlay || !questionEl || !buttonsEl) return;
+
+        // Popup data
+        const popups = [
+            {
+                id: 1,
+                emoji: '💬',
+                question: 'শুন হাসি, একটা কথা বল তো…\nতুই কি মনে করতে পারিস, আমাদের friendship শুরুটা এতটা গভীর হয়ে যাবে? 🥹',
+                buttons: [
+                    { text: 'হ্যাঁ 💛', type: 'primary', response: 'আমিও তাই ভাবতাম না! 💛友谊 এতটা গভীর হবে ভাবাও ছিল না। 🥹' },
+                    { text: 'না 😂', type: 'secondary', response: 'হা হা! কিন্তু হয়ে গেছে! এবার আর পালানো যায় না! 😂💛' }
+                ]
+            },
+            {
+                id: 2,
+                emoji: '👻',
+                question: 'শুন পেত্নী 👻\nআমাদের মধ্যে বেশি রাগ করে কে?',
+                buttons: [
+                    { text: 'তুই 😑', type: 'same', response: 'জানি! উত্তরটা দুটোতেই একই। 😂' },
+                    { text: 'তুই-ই 😑', type: 'same', response: 'জানি! উত্তরটা দুটোতেই একই। 😂' }
+                ]
+            },
+            {
+                id: 3,
+                emoji: '🥹',
+                question: 'একটা serious প্রশ্ন… 🥹\nতুই কি জানিস, তোর সাথে এই বন্ধুত্বটা আমার কাছে সত্যিই অনেক special?',
+                buttons: [
+                    { text: 'জানি 💛', type: 'primary', response: '💛 তাহলে ভালো! কারণ তুই জানিস—আর আমিও জানি। 🥹' },
+                    { text: 'এখন জানলাম 🥹', type: 'secondary', response: 'এখন জানলেই হলো! বাকিটা ধীরে ধীরে বুঝতে পারবি। 💛🥹' }
+                ]
+            },
+            {
+                id: 4,
+                emoji: '🫂',
+                question: 'শেষে যাওয়ার আগে একটা উত্তর দে…\nএতগুলো বছর পরেও কি আমাকে তোর Best Friend হিসেবে রাখবি? 🫂',
+                buttons: [
+                    { text: 'হ্যাঁ 💛', type: 'primary', response: '💙 এই একটা কথাই যথেষ্ট। 🫂💛' },
+                    { text: 'অবশ্যই 💛', type: 'primary', response: '💙 এই একটা কথাই যথেষ্ট। 🫂💛' }
+                ]
+            }
+        ];
+
+        let currentSequence = 0; // 0 = popup 1, 1 = popup 2, etc.
+        let isPopupOpen = false;
+        let shownPopups = new Set();
+
+        function showPopup(index) {
+            if (index >= popups.length || isPopupOpen || shownPopups.has(index)) return;
+
+            const popup = popups[index];
+            isPopupOpen = true;
+
+            // Pause auto-scroll
+            const autoScrollPauseEvent = new CustomEvent('popup-pause');
+            window.dispatchEvent(autoScrollPauseEvent);
+
+            // Set content
+            emojiEl.textContent = popup.emoji;
+            questionEl.textContent = popup.question;
+            buttonsEl.innerHTML = '';
+            responseEl.classList.add('hidden');
+            responseEl.textContent = '';
+
+            // Create buttons
+            popup.buttons.forEach(btn => {
+                const button = document.createElement('button');
+                button.className = 'popup-btn popup-btn-' + btn.type;
+                button.textContent = btn.text;
+                button.addEventListener('click', function() {
+                    // Show response
+                    responseEl.textContent = btn.response;
+                    responseEl.classList.remove('hidden');
+
+                    // Hide buttons
+                    buttonsEl.style.opacity = '0';
+                    buttonsEl.style.pointerEvents = 'none';
+
+                    // Close after delay
+                    setTimeout(function() {
+                        closePopup(index);
+                    }, 1800);
+                });
+                buttonsEl.appendChild(button);
+            });
+
+            // Show overlay
+            overlay.classList.remove('hidden', 'hiding');
+            overlay.classList.add('visible');
+
+            shownPopups.add(index);
+        }
+
+        function closePopup(index) {
+            overlay.classList.add('hiding');
+
+            setTimeout(function() {
+                overlay.classList.remove('visible', 'hiding');
+                overlay.classList.add('hidden');
+                isPopupOpen = false;
+                buttonsEl.style.opacity = '1';
+                buttonsEl.style.pointerEvents = 'auto';
+
+                // Resume auto-scroll after a short delay
+                setTimeout(function() {
+                    window.dispatchEvent(new CustomEvent('popup-resume'));
+                }, 500);
+            }, 350);
+        }
+
+        // IntersectionObserver for trigger elements
+        const triggers = document.querySelectorAll('[data-question-popup]');
+        const triggerObserver = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    const id = parseInt(entry.target.getAttribute('data-question-popup'));
+                    const popupIndex = id - 1;
+
+                    // Only show if it's the next in sequence or earlier (in case user scrolled past)
+                    if (popupIndex >= currentSequence && popupIndex < popups.length) {
+                        setTimeout(function() {
+                            showPopup(popupIndex);
+                            currentSequence = popupIndex + 1;
+                        }, 400);
+                    }
+                    triggerObserver.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -10% 0px'
+        });
+
+        triggers.forEach(function(trigger) {
+            triggerObserver.observe(trigger);
+        });
+
+        // Listen for popup-pause and popup-resume to integrate with auto-scroll
+        window.addEventListener('popup-pause', function() {
+            // Dispatch a custom scroll pause event that the auto-scroll system listens to
+            window.dispatchEvent(new Event('pause-autoscroll'));
+        });
+
+        window.addEventListener('popup-resume', function() {
+            window.dispatchEvent(new Event('resume-autoscroll'));
+        });
+    })();
+
+    // --- Listen for popup pause/resume events (auto-scroll integration) ---
+    (function() {
+        window.addEventListener('pause-autoscroll', function() {
+            // Pause auto-scroll by dispatching touchstart
+            window.dispatchEvent(new Event('touchstart'));
+        });
+        window.addEventListener('resume-autoscroll', function() {
+            // Resume auto-scroll — auto-scroll resumes via its own timer
+        });
+    })();
 });
